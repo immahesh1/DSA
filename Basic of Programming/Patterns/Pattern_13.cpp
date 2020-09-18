@@ -5,6 +5,9 @@
 //	1	4	6	4	1	
 //	1	5	10	10	5	1
 
+//use formula of combination
+//nCr
+
 #include<bits/stdc++.h>
 using namespace std;
 
