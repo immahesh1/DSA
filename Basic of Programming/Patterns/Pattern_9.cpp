@@ -1,8 +1,10 @@
-//	 				*
-//	 			*
-// 			*
-// 		*
-// 	*
+// 	*						*
+// 		*				*
+// 			*		*
+// 				*
+// 			*		*
+// 		*				*
+// 	*						*
 
 
 #include<bits/stdc++.h>
@@ -14,9 +16,10 @@ int main()
 	cin >> n;
 
 
+	// int sp = n - 1;
 	for (int i = 1; i <= n; i++) {
 		for (int j = 1; j <= n; j++) {
-			if (i + j == n + 1) {
+			if (i == j || i + j == n + 1) {
 				cout << "*\t";
 			}
 			else {
@@ -24,6 +27,7 @@ int main()
 			}
 
 		}
+		// sp--;
 		cout << endl;
 	}
 
