@@ -1,47 +1,38 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+int any_base_sub_fun(int n1, int n2, int b) {
+	int c = 0;
+	int rv = 0;
+	int p = 1;
+	while (n2 > 0) {
+		int d1 = n1 % 10;
+		int d2 = n2 % 10;
+		n1 = n1 / 10;
+		n2 = n2 / 10;
 
-int base_to_decimal(int n, int b) {
-	int decima_val = 0;
-	int p = 0;
+		int d = 0;
+		d2 = d2 + c;
+		if (d2 >= d1) {
+			c = 0;
+			d = d2 - d1;
+		} else {
+			c = -1;
+			d = d2 + b - d1;
+		}
+		rv = rv + d * p;
+		p  = p * 10;
 
-	while (n > 0) {
-		int tmp = n % 10;
-		decima_val = decima_val + tmp * pow(b, p++);
-		n = n / 10;
+		// cout << rv << endl;
 	}
-	return decima_val;
+	return rv;
 }
-
-int decimal_to_base(int n, int b) {
-	int final_val = 0;
-	int p = 0;
-
-	while (n > 0) {
-		int tmp = n % b;
-		final_val = final_val + tmp * pow(10, p++);
-		n = n / b;
-	}
-	return final_val;
-}
-
 int main()
 {
-	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
-#ifndef ONLINE_JUDGE
-	freopen("input1.txt", "r", stdin);
-	freopen("output1.txt", "w", stdout);
-#endif
-
 	int b, n1, n2;
 	cin >> b >> n1 >> n2;
 
-	int n11 = base_to_decimal(n1, b);
-	int n22 = base_to_decimal(n2, b);
-
-	cout << decimal_to_base(n11 - n22, b);
-
+	cout << any_base_sub_fun(n1, n2, b) << endl;
 
 
 	return 0;
