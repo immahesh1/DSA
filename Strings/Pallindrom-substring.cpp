@@ -17,14 +17,13 @@ bool isPalli(string s) {
 int main(){
 	string s;
 	cin >> s;
-	int sz = 1;
-	for(int sz=1; sz<=s.size();sz++){
-		for(int i=0; i<=s.size() - sz; i++){
-//			cout << s.substr(i,sz) << endl;
+	
+	for(int i=0; i<=s.size(); i++){
+		for(int sz=1; sz<=s.size()-i;sz++){
 			string str = s.substr(i,sz);
 			if(isPalli(str)==1){
 				cout << str << endl;
-			}
+			}	
 		}
 	}
 
