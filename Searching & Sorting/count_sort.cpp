@@ -26,6 +26,7 @@ void count_sort(int* ar, int min, int max) {
 	for (int i = 0; i < ar_size; i++) {
 		ar[i] = res[i];
 	}
+}
 
 int main()
 {
