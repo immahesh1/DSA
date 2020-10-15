@@ -16,7 +16,7 @@ class DateSort{
     static void countSort(String ar[], int div, int mod, int range){
         int[] far = new int[range];
         for(int i=0; i<ar.length; i++){
-            far[Integer.parseInt(ar[i]) / div % mod]++;
+            far[Integer.parseInt(ar[i],10) / div % mod]++;
         }
         for(int i=1; i<far.length; i++){
             far[i] += far[i-1];
@@ -25,7 +25,7 @@ class DateSort{
         String[] res = new String[ar.length];
         for(int i=ar.length-1; i>=0; i--){
             res[far[Integer.parseInt(ar[i]) / div % mod]-1] = ar[i];
-            far[Integer.parseInt(ar[i]) / div % mod]--;
+            far[Integer.parseInt(ar[i],10) / div % mod]--;
         }
         for(int i=0; i<res.length; i++){
             ar[i] = res[i];
