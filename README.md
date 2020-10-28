@@ -1,3 +1,3 @@
-# Data Structures and Algorithms problems solved 
+# Data Structures and Algorithms 
 # Platform: Pepcoding
 ## Lang used: CPP and Java
