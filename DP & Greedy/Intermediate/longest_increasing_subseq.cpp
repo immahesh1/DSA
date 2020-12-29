@@ -7,7 +7,7 @@ int countSubseq(int* ar, int n){
 	for(int i=0; i<n; i++){
 		int max = 0;
 		for(int j=0; j<i; j++){
-			if(ar[j] < ar[i]){
+			if(ar[j] <= ar[i]){
 				if(dp[j] > max){
 					max = dp[j];
 				}
