@@ -2,19 +2,19 @@ import java.util.*;
 import java.io.*;
 
 class Main{
-    public static class Envelop implements Comparable<Envelop>{
+    public static class Envelope implements Comparable<Envelope>{
         int w,h;
-        public int compareTo(Envelop o){
+        public int compareTo(Envelope o){
             return this.w - o.w;
         }
     }
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int n = Integer.parseInt(br.readLine());
-        Envelop env[] = new Envelop[n];
+        Envelope env[] = new Envelope[n];
         for(int i=0; i<n; i++){
             String str = br.readLine();
-            env[i] = new Envelop();
+            env[i] = new Envelope();
             env[i].w = Integer.parseInt(str.split(" ")[0]);
             env[i].h = Integer.parseInt(str.split(" ")[1]);
         }
