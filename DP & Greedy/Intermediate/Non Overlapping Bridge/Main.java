@@ -1,7 +1,7 @@
 import java.util.*;
 import java.io.*;
 
-class NonOverlappingBr{
+class Main{
     public static class Bridge implements Comparable<Bridge>{
         int n,s;
         public int compareTo(Bridge o){
