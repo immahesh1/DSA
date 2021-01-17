@@ -1,25 +1,27 @@
 #include<bits/stdc++.h>
 using namespace std;
-std::vector<string> dict = {"abc","def","ghi","jkl","nmo","pqr","stu","vwx","yz"};
 
-vector<string> keypad_comb(string s){
-	if(s.size() == 0){
-		vector<string> v;
-		v.push_back(" ");
-		return v; 
+class student{
+public:
+	string name;
+	int age;
+
+	student(string name,int age){
+		this -> name = name;
+		this -> age = age;
 	}
-	int n = (s[0]-'0');
-	string rem = s.substr(1,s.size()-1);
-	vector<string> ret = keypad_comb(rem);
-	string dict_val = dict[n];
-	vector<string> out;
-	for(auto e:ret){
-		for(auto d:dict_val){
-			out.push_back(d+e);
+};
+
+class studentCompare{
+public:
+	bool operator()(const student& a,const student& b){
+		if(a.age > b.age){
+			return true;
 		}
+		return false;
 	}
-	return out;
-}
+};
+
 int main(){
 	#ifndef ONLINE_JUDGE
 		//for getting input from input1.txt
@@ -27,10 +29,24 @@ int main(){
 		//for writing output to output1.txt
 		freopen("output.txt","w",stdout);
 	#endif
-	string s;	cin >> s;
-	std::vector<string> ress = keypad_comb(s);
-	for(auto re:ress){
-		cout << re << endl;
+
+	student s1("ABC", 2);
+	student s2("Rupu", 16);
+	student s3("Mahesh", 24);
+	student s4("Rudra", 15);
+
+	list<student> sl;
+	sl.push_back(s1);
+	sl.push_back(s2);
+	sl.push_back(s3);
+	sl.push_back(s4);
+
+	studentCompare cmp;
+
+	sl.sort(cmp);
+
+	for(auto s:sl){
+		cout << "Name: " << s.name << " Age: " << s.age << endl;
 	}
 
 }
