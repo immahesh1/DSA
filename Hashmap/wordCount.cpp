@@ -1,3 +1,6 @@
+//operator << — add a string to the stringstream object.
+// operator >> — read something from the stringstream object,
+
 #include<bits/stdc++.h>
 using namespace std;
 void highest_freq_char(string &s){
