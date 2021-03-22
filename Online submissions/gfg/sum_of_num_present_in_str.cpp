@@ -8,7 +8,7 @@ void string_sum(string s){
 		if(isdigit(ch)){
 			tmp += ch;
 		}else{
-			sum += atoi(tmp.c_str());
+			sum += stoi(tmp);
 			tmp = "";
 		}
 	}
