@@ -1,0 +1,4 @@
+Min: 10
+Max: 120
+Height: 3
+Size: 12
