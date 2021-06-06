@@ -16,6 +16,15 @@ public class bintree{
             this.right = right;
         }
     }
+    public static class TreeNode{
+        int data;
+        TreeNode left;
+        TreeNode right;
+        public TreeNode(int data){
+            this.left = this.right = null;
+            this.data = data;
+        }
+    }
     public static class Pair{
         Node node;
         int state;
@@ -80,10 +89,16 @@ public class bintree{
     }
     public static int max(Node node) {
     // write your code here
-        if(node == null) return 0;
+        if(node == null) return Integer.MIN_VALUE;
         int ln = max(node.left);
         int rn = max(node.right);
         return Math.max(node.data, Math.max(ln, rn));
+    }
+    public static int min(Node node){
+        if(node == null)    return Integer.MAX_VALUE;
+        int ln = min(node.left);
+        int rn = min(node.right);
+        return Math.min(node.data, Math.min(ln, rn));
     }
     public static int height(Node node) {
         if(node == null)    return -1;
@@ -287,6 +302,22 @@ public class bintree{
         printSingleChildNodes(node.left, node);
         printSingleChildNodes(node.right, node);
     }
+    static int tilt = 0;
+    public static int sumForTilt(Node node){
+        if(node == null)    return 0;
+        int lsum = sumForTilt(node.left);
+        int rsum = sumForTilt(node.right);
+
+        //add contribuition in tilt variable
+        tilt += Math.abs(lsum - rsum);
+        return lsum + rsum + node.data;
+    }
+    public static int tilt(Node node){
+        if(node == null)    return 0;
+        tilt = 0;
+        sumForTilt(node);
+        return tilt;
+    }
     public static Node removeLeaves(Node node){
         if(node == null)    return null;
         if(node.left != null && (node.left.left == null && node.left.right == null)){
@@ -299,8 +330,117 @@ public class bintree{
         removeLeaves(node.right);
         return node;
     }
+    public static Node removeLeaves2(Node node){
+        if(node == null) return null;
+        if(node.left != null && node.right != null){
+            node.left = removeLeaves2(node.left);
+            node.right = removeLeaves2(node.right);
+        }else if(node.left != null){
+            node.left = removeLeaves2(node.left);
+        }else if(node.right != null){
+            node.right = removeLeaves2(node.right);
+        }else{
+            //leaf node --> removal
+            node = null;
+        }
+        return node;
+    }
+    public static int diameter = 0;
+    public int heightForDiameter(TreeNode root){
+        if(root == null)    return -1;
+        int lh = heightForDiameter(root.left);
+        int rh = heightForDiameter(root.right);
+        diameter = Math.max(diameter, lh+rh+2);
+        return Math.max(lh,rh) + 1;
+    }
+    public int diameterOfBinaryTree(TreeNode root){
+        diameter = 0;
+        heightForDiameter(root);
+        return diameter;
+    }
+    public static boolean isBST1(Node node){
+        // o(n^2) since we are checking traverlling through entire tree in min and max calculation
+        if(node == null)    return true;
+        //self check
+        int lnmax = max(node.left);
+        int rnmin = min(node.right); 
+
+        if(lnmax > node.data || rnmin < node.data) return false;
+
+        //left check && right check
+        return isBST1(node.left) && isBST1(node.right);
+    }
+    public static class BSTPair{
+        boolean isBST;
+        int min;
+        int max;
+        int size;
+        public BSTPair(){
+            this.isBST = true;
+            this.max = Integer.MIN_VALUE;
+            this.min = Integer.MAX_VALUE;
+            this.size = 0;
+        }
+        public BSTPair(boolean isBST, int min, int max, int size){
+            this.isBST = isBST;
+            this.min = min;
+            this.max = max;
+            this.size = size;
+        }
+    }
+    //O(n)
+    public static BSTPair isBST2(Node node){
+        if(node == null)    return new BSTPair();
+        BSTPair isleftBST = isBST2(node.left);
+        BSTPair isrightBST = isBST2(node.right);
+        boolean status = isleftBST.max < node.data && isrightBST.min > node.data;
+        BSTPair mres = new BSTPair();
+        mres.max = Math.max(node.data, Math.max(isleftBST.max, isrightBST.max));
+        mres.min = Math.min(node.data, Math.min(isleftBST.min, isrightBST.min));
+        mres.isBST = isleftBST.isBST && isrightBST.isBST && status;
+        return mres;
+    }
+    public static class BPair{
+        int ht;
+        boolean isBalanced;
+        public BPair(){
+            ht = -1;
+            isBalanced = true;
+        }
+        public BPair(int ht, boolean isBalanced){
+            this.ht = ht;
+            this.isBalanced = isBalanced;
+        }
+    }
+    public static BPair isBalancedTree(Node node){
+        if(node == null)    return new BPair();
+        BPair ln = isBalancedTree(node.left);
+        BPair rn = isBalancedTree(node.right);
+        boolean status = Math.abs(ln.ht-rn.ht) <= 1;
+        BPair mres = new BPair();
+        mres.ht = Math.max(ln.ht, rn.ht) + 1;
+        mres.isBalanced = status && ln.isBalanced && rn.isBalanced;
+        return mres;
+    }
+    static int sz = 0;
+    static Node bstNode = null;
+    public static BSTPair bstSubtree(Node node){
+        if(node == null)   return new BSTPair();
+        
+        BSTPair lres = bstSubtree(node.left);
+        BSTPair rres = bstSubtree(node.right);
+
+        boolean status = lres.max < node.data && rres.min > node.data;
+        BSTPair mres = new BSTPair();
+        mres.max = Math.max(node.data, Math.max(lres.max, rres.max));
+        mres.min = Math.min(node.data, Math.min(lres.min, rres.min));
+        mres.isBST = lres.isBST && rres.isBST && status;
+        mres.size = lres.size + rres.size + 1;
+        if()
+    }
     public static void func(){
         Integer[] arr = {50, 25, 12, null, null, 37, 30, null, null, null, 75, 62, null, 70, null, null, 87, null, null};
+        // Integer[] arr = {50,null};
         Node root = construct(arr);
         
         display(root);
@@ -312,6 +452,8 @@ public class bintree{
         // levelOrder(root);
         // recursivePrePostInTraversal(root);
         iterativePrePostInTraversal(root);
+        System.out.println(removeLeaves(root));
+        System.out.println(isBST2(root).isBST);
     }
     public static void main(String[] args){
         func();
