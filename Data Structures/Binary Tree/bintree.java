@@ -422,6 +422,7 @@ public class bintree{
         mres.isBalanced = status && ln.isBalanced && rn.isBalanced;
         return mres;
     }
+    
     static int sz = 0;
     static Node bstNode = null;
     public static BSTPair bstSubtree(Node node){
