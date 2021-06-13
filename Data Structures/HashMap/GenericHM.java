@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
-class hashMap{
+class hash_map<K,V>{
     private class Node{
-        String key;
-        int value;
-        public Node(String key, int value) {
+        K key;
+        V value;
+        public Node(K key, V value) {
             this.key = key;
             this.value = value;
         }
@@ -21,16 +21,16 @@ class hashMap{
         this.size = 0;
     }
 
-    public hashMap(){
+    public hash_map(){
         init(4);
     }
     
-    private int hashFunc(String key){
+    private int hashFunc(K key){
         int bi = Math.abs(key.hashCode()) % bucket.length;
         return bi;
     }
 
-    private int searchInBucket(String key, int bi){
+    private int searchInBucket(K key, int bi){
         int di = 0;
         for(Node node : bucket[bi]){
             if(node.key.equals(key) == true){
@@ -51,7 +51,7 @@ class hashMap{
         }
     }
 
-    public void put(String key, int value){
+    public void put(K key, V value){
         // first get the bucket index (bi)
         int bi = hashFunc(key);
 
@@ -69,7 +69,7 @@ class hashMap{
         }
     }
 
-    public int get(String key){
+    public V get(K key){
         // first get the bucket index (bi)
         int bi = hashFunc(key);
 
@@ -77,7 +77,7 @@ class hashMap{
         int di = searchInBucket(key, bi);
 
         if(di == -1){
-            return -1;
+            return null;
         }else{
             // get node from linkedlist
             Node node = bucket[bi].get(di);
@@ -85,19 +85,19 @@ class hashMap{
         }
     }
 
-    public int remove(String key){
+    public V remove(K key){
         int bi = hashFunc(key);
         int di = searchInBucket(key, bi);
         if(di == -1){
             // System.out.println("Queue underflow");
-            return -1;
+            return null;
         }else{
-            int ret = bucket[bi].remove(di).value;
+            Node node = bucket[bi].remove(di);
             size--;
-            return ret;
+            return node.value;
         }
     }
-    public boolean containsKey(String key){
+    public boolean containsKey(K key){
         // first get the bucket index (bi)
         int bi = hashFunc(key);
 
@@ -111,8 +111,8 @@ class hashMap{
         }
     }
 
-    public ArrayList<String> keySet(){
-        ArrayList<String> al = new ArrayList<>();
+    public ArrayList<K> keySet(){
+        ArrayList<K> al = new ArrayList<>();
 
         for(int bi=0; bi<bucket.length; bi++){
             for(Node node : bucket[bi]){
@@ -135,9 +135,9 @@ class hashMap{
     }
 }
 
-public class hmap{
+public class GenericHM{
     public static void func(){
-        hashMap map = new hashMap();
+        hash_map<String, Integer> map = new hash_map<>();
         map.put("india", 140);
         map.put("pak", 40);
         map.put("US", 80);

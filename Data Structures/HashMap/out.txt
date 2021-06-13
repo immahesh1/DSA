@@ -1,6 +1,21 @@
-20
-21
-22
-23
-24
-25
+[pak : 40]
+[US : 80]
+[india : 140]
+[Aus : 36]
+ .
+bucket : 0 -> .
+bucket : 1 -> .
+bucket : 2 -> [pak = 40], [US = 80], .
+bucket : 3 -> [india = 140], [Aus = 36], .
+*******
+true
+Remove: 40
+[NZ : 10]
+[US : 80]
+[india : 150]
+[Aus : 36]
+ .
+bucket : 0 -> [NZ = 10], .
+bucket : 1 -> .
+bucket : 2 -> [US = 80], .
+bucket : 3 -> [india = 150], [Aus = 36], .
