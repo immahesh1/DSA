@@ -127,6 +127,7 @@ public class gentree{
     //level order using delimiter (null)
     public static void levelOrderLinewiseDelimiter(Node node){
         Queue<Node> qu = new LinkedList<>();
+        // use linkedlist as a queue, because arrayDeque is not allow us to add null
         qu.add(node);
         qu.add(null);
         while(qu.size() > 0){
@@ -149,6 +150,7 @@ public class gentree{
             }
         }
     }
+
     public static void levelOrderLinewiseZZ(Node node){
         Stack<Node> mainS = new Stack<>();
         Stack<Node> childS = new Stack<>();
