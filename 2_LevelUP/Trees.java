@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Stack;
@@ -743,8 +744,71 @@ public class Trees {
     return ans;
   }
 
-  // Diagonal Order Of A Binarytree
-  public static ArrayList<ArrayList<Integer>> diagonalOrder(TreeNode root) {
+  // Top View Of A Binarytree : https://practice.geeksforgeeks.org/problems/top-view-of-binary-tree/1#
+  public static ArrayList<Integer> TopView(TreeNode root) {
+    if (root == null) return new ArrayList<>();
+    lh = 0;
+    rh = 0;
+    int width = width(root);
+    ArrayList<Integer> res = new ArrayList<>();
+    for (int i = 0; i < width; i++) res.add(null);
+
+    Queue<TPair> qu = new LinkedList<>();
+
+    qu.add(new TPair(root, Math.abs(lh)));
+
+    while (qu.size() > 0) {
+      // 1. get and rem
+      TPair rem = qu.remove();
+      // 2. work
+      if (res.get(rem.count) == null) {
+        res.set(rem.count, rem.node.val);
+      }
+      // 3. add children
+      if (rem.node.left != null) qu.add(
+        new TPair(rem.node.left, rem.count - 1)
+      );
+      if (rem.node.right != null) qu.add(
+        new TPair(rem.node.right, rem.count + 1)
+      );
+    }
+
+    return res;
+  }
+
+  // Bottom View : https://practice.geeksforgeeks.org/problems/bottom-view-of-binary-tree/1
+
+  public static ArrayList<Integer> BottomView(TreeNode root) {
+    if (root == null) return new ArrayList<>();
+    lh = 0;
+    rh = 0;
+    int width = width(root);
+    ArrayList<Integer> res = new ArrayList<>();
+    for (int i = 0; i < width; i++) res.add(null);
+
+    Queue<TPair> qu = new LinkedList<>();
+
+    qu.add(new TPair(root, Math.abs(lh)));
+
+    while (qu.size() > 0) {
+      // 1. get and rem
+      TPair rem = qu.remove();
+      // 2. work
+      res.set(rem.count, rem.node.val);
+      // 3. add children
+      if (rem.node.left != null) qu.add(
+        new TPair(rem.node.left, rem.count - 1)
+      );
+      if (rem.node.right != null) qu.add(
+        new TPair(rem.node.right, rem.count + 1)
+      );
+    }
+
+    return res;
+  }
+
+  // Diagonal Order Of A Binarytree : https://practice.geeksforgeeks.org/problems/diagonal-traversal-of-binary-tree/1#
+  public static ArrayList<ArrayList<Integer>> diagonalOrder_(TreeNode root) {
     ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
     if (root == null) return ans;
     Queue<TreeNode> qu = new LinkedList<>();
@@ -766,6 +830,57 @@ public class Trees {
       ans.add(al);
     }
     return ans;
+  }
+
+  //
+  public static ArrayList<ArrayList<Integer>> diagonalOrder2(TreeNode root) {
+    ArrayList<ArrayList<Integer>> res = new ArrayList<>();
+    if (root == null) return res;
+
+    Queue<TreeNode> qu = new LinkedList<>();
+    qu.add(root);
+
+    while (qu.size() > 0) {
+      int factorSize = qu.size();
+      ArrayList<Integer> list = new ArrayList<>();
+      while (factorSize-- > 0) {
+        TreeNode factor = qu.remove();
+        while (factor != null) {
+          list.add(factor.val);
+          if (factor.right != null) {
+            qu.add(factor.right);
+          }
+          factor = factor.left;
+        }
+      }
+      res.add(list);
+    }
+
+    return res;
+  }
+
+  // diagonal order sum
+  public static ArrayList<Integer> diagonalOrderSum(TreeNode root) {
+    ArrayList<Integer> res = new ArrayList<>();
+    Queue<TreeNode> qu = new LinkedList<>();
+    qu.add(root);
+
+    while (qu.size() > 0) {
+      int sum = 0;
+      int factorSize = qu.size();
+      while (factorSize-- > 0) {
+        TreeNode factor = qu.remove();
+        while (factor != null) {
+          sum += factor.val;
+          if (factor.left != null) {
+            qu.add(factor.left);
+          }
+          factor = factor.right;
+        }
+      }
+      res.add(sum);
+    }
+    return res;
   }
 
   // vertical order sum

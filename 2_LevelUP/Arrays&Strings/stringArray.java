@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class stringArray {
 
@@ -103,6 +105,50 @@ public class stringArray {
         }else{
             System.out.println("No Majority Element exist");
         }
+    }
+
+    //229. Majority Element II: https://leetcode.com/problems/majority-element-ii/
+    private boolean isFreqMoreThan3(int[] nums, int val){
+        int freq = 0;
+        for(int e : nums){
+            if(e == val){
+                freq++;
+            }
+        }
+        return freq>nums.length/3;
+    }  
+    public List<Integer> majorityElement(int[] nums) {
+        int val1 = nums[0];
+        int count1 = 0;
+        int val2 = nums[0];
+        int count2 = 0;
+        for(int i=0; i<nums.length; i++){
+            if(nums[i] == val1){
+                count1++;
+            }else if(nums[i] == val2){
+                count2++;
+            }else{
+                if(count1 == 0){
+                    val1 = nums[i];
+                    count1 = 1;
+                }else if(count2 == 0){
+                    val2 = nums[i];
+                    count2 = 1;
+                }else{
+                    count1--;
+                    count2--;
+                }
+            }
+        }
+
+        List<Integer> res = new ArrayList<>();
+        if(isFreqMoreThan3(nums, val1))
+            res.add(val1);
+
+        if(val2 != val1 && isFreqMoreThan3(nums, val2))
+            res.add(val2);
+
+        return res;
     }
     // 628. Maximum Product of Three Numbers
     public int maximumProduct(int[] nums) {
@@ -336,6 +382,255 @@ public class stringArray {
         }
         
         return Math.max(max, len);
+    }
+
+    // https://leetcode.com/problems/first-missing-positive/
+
+    public int firstMissingPositive(int[] nums) {
+        int n = nums.length;
+        // step 1: mark element which are out of range
+        boolean one = false;
+        for(int i=0; i<n; i++){
+            if(nums[i] == 1) one = true;
+
+            if(nums[i] < 1 || nums[i] > n){
+                nums[i] = 1;
+            }
+        }
+        if(one == false) return 1;
+        // step 2 : mark index 
+        for(int i=0; i<n; i++){
+            int idx = nums[i] - 1;
+            nums[idx] = -Math.abs(nums[idx]);
+        }
+
+        // step 3 : check first missing postivie no.
+        for(int i=0; i<n; i++){
+            if(nums[i] > 0){
+                return i+1;
+            }
+        }
+        return n+1;
+    }
+
+    // https://leetcode.com/problems/sort-array-by-parity/
+    public int[] sortArrayByParity(int[] nums) {
+        int i = 0; // first unsorted
+        int j = 0; // first odd
+        while(i < nums.length){
+            if(nums[i] % 2 == 0){
+                //even
+                int tmp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = tmp;
+                i++;
+                j++;
+            }else{
+                //odd
+                i++;
+            }
+        }
+        return nums;
+    }
+    
+    // https://www.lintcode.com/problem/903/
+    public int[] getModifiedArray(int length, int[][] updates) {
+        int[] res = new int[length];
+
+        // Step 1: travel on query and mark
+        for(int i=0; i<updates.length; i++){
+            int st = updates[i][0];
+            int end = updates[i][1];
+            int incr = updates[i][2];
+
+            res[st] += incr;
+            if(end != length-1){
+                res[end+1] -= incr;
+            }
+        } 
+
+        // step 2: prefix sum
+        for(int i=1; i<length; i++){
+            res[i] += res[i-1];
+        }
+        return res;
+    }
+
+    //670. Maximum Swap: https://leetcode.com/problems/maximum-swap/
+    public int maximumSwap(int n) {
+        String num = n + "";
+        char[] arr = num.toCharArray();
+
+        int[] lastOcc = new int[10];
+        for(int i=0; i < arr.length; i++){
+            lastOcc[arr[i]-'0'] = i; // filling last occurance of digit
+        }
+
+        // travel and find swapping point
+        for(int i=0; i < arr.length; i++){
+            int val = arr[i] - '0';
+            int indx = i;
+            if(val != 9){
+                for(int j=9; j > val; j--){
+                    if(lastOcc[j] > i){
+                        indx = lastOcc[j];
+                        break;
+                    }
+                }
+
+                if(indx != i){
+                    char tmp = arr[i];
+                    arr[i] = arr[indx];
+                    arr[indx] = tmp;
+                    break;
+                }
+            }
+        }
+        String res = String.valueOf(arr);
+        // convert string into number
+        return Integer.parseInt(res);
+    }
+
+    // https://www.lintcode.com/problem/912/
+    public int minTotalDistance(int[][] grid) {
+        int dist = 0;
+        // fill xco-ordinates in arraylist in sorted order - row traversal
+        ArrayList<Integer> xcord = new ArrayList<>();
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c<grid[0].length; c++){
+                if(grid[r][c] == 1){
+                    xcord.add(r);
+                }
+            }
+        }
+
+        // fill yco-ordinates in arraylist in sorted order - col traversal
+        ArrayList<Integer> ycord = new ArrayList<>();
+        for(int c = 0; c<grid[0].length; c++){
+            for(int r = 0; r < grid.length; r++){
+                if(grid[r][c] == 1){
+                    ycord.add(c);
+                }
+            }
+        }
+
+        // find meeting point
+        int x = xcord.get(xcord.size()/2);
+        int y = ycord.get(ycord.size()/2);
+
+        // apply manhattan formula to find distance between meeting point and person p
+        for(int r = 0; r < grid.length; r++){
+            for(int c = 0; c<grid[0].length; c++){
+                if(grid[r][c] == 1){
+                    dist += Math.abs(x-r) + Math.abs(y-c);
+                }
+            }
+        }
+
+        return dist;
+    }
+
+    // https://leetcode.com/problems/pascals-triangle-ii/
+    public static List<Integer> pascalRow(int n) {
+        List<Integer> res = new ArrayList<>();
+        long val = 1;
+        for(int r=0; r<=n; r++){
+            res.add((int)val);
+            val = val * (n-r)/(r+1);
+        }
+
+        return res;
+    }
+
+    // https://leetcode.com/problems/complex-number-multiplication/
+    public String complexNumberMultiply(String num1, String num2) {
+        int a1 = Integer.parseInt(num1.substring(0,num1.indexOf("+")));
+        int b1 = Integer.parseInt(num1.substring(num1.indexOf("+")+1, num1.length()-1));
+
+        int a2 = Integer.parseInt(num2.substring(0,num2.indexOf("+")));
+        int b2 = Integer.parseInt(num2.substring(num2.indexOf("+")+1, num2.length()-1));
+
+        int a = a1 * a2 - b1 * b2;
+        int b = a1 * b2 + a2 * b1;
+
+        return a + "+" + b + "i";
+    }
+
+    public static List<List<Integer>> twoSum(int[] arr, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+
+        Arrays.sort(arr);
+
+        int left = 0;
+        int right = arr.length - 1;
+        while(left < right){
+            // preprocessing
+            if(left != 0 && arr[left] == arr[left-1]){
+                left++;
+                continue;
+            }
+            int sum = arr[left] + arr[right];
+            if(sum == target){
+                List<Integer> sub = new ArrayList<>();
+                sub.add(arr[left]);
+                sub.add(arr[right]);
+                res.add(sub);
+                left++;
+                right--;
+            }else if(sum > target){
+                right--;
+            }else{
+                left++;
+            }
+        }
+
+        return res;
+    }
+
+    private static List<List<Integer>> twoSumfor3Sum(int[] arr, int st, int end, int target){
+        List<List<Integer>> res = new ArrayList<>();
+        int left = st;
+        int right = end;
+        while(left < right){
+            // preprocessing
+            if(left != st && arr[left] == arr[left-1]){
+                left++;
+                continue;
+            }
+            int sum = arr[left] + arr[right];
+            if(sum == target){
+                List<Integer> sub = new ArrayList<>();
+                sub.add(arr[left]);
+                sub.add(arr[right]);
+                res.add(sub);
+                left++;
+                right--;
+            }else if(sum > target){
+                right--;
+            }else{
+                left++;
+            }
+        }
+
+        return res;
+    }
+    public static List<List<Integer>> threeSum(int[] nums, int targ) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        for(int i=0; i<nums.length; i++){
+            if(i != 0 && nums[i] == nums[i-1]){
+                continue;
+            }
+            int val = nums[i];
+            int smallTarget = targ - val;
+            List<List<Integer>> subres = twoSumfor3Sum(nums, i+1, nums.length-1, smallTarget);
+            for(List<Integer> list : subres){
+                list.add(val);
+                res.add(list);
+            }
+        }
+
+        return res;
     }
     public static test(){
 
